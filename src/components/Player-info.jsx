@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const PlayerInfo = ({ initialName, symbolName }) => {
-
+const PlayerInfo = ({ initialName, symbolName, isActive }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [playerName, setPlayerName] = useState(initialName);
     const inputRef = useRef(null);
@@ -30,7 +29,7 @@ const PlayerInfo = ({ initialName, symbolName }) => {
     }
 
     return (
-        <li>
+        <li className={isActive ? 'active' : undefined}>
             <span className="player">
                 {playerHTML}
                 <span className="player-symbol">{symbolName}</span>

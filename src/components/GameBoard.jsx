@@ -4,15 +4,17 @@ const initialGameBoard = [
     [null, null, null],
     [null, null, null]
 ];
-const GameBoard = () => {
+const GameBoard = ({ onChangeActivePlayer, activePlayerSymbol }) => {
     const [gameBoard, setGameBoard] = useState(initialGameBoard);
     const handleSelectSquare = useCallback((rowIndex, colIndex) => {
+
         setGameBoard((prevGameBoard) => {
             const updatedGameBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-            updatedGameBoard[rowIndex][colIndex] = "X" || "O";
+            updatedGameBoard[rowIndex][colIndex] = activePlayerSymbol;
             return updatedGameBoard;
         })
-    }, [])
+        onChangeActivePlayer();
+    }, [onChangeActivePlayer, activePlayerSymbol])
     return (
         <ol id="game-board">
             {gameBoard.map((row, rowIndex) => {
