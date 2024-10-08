@@ -4,17 +4,27 @@ const initialGameBoard = [
     [null, null, null],
     [null, null, null]
 ];
-const GameBoard = ({ onChangeActivePlayer, activePlayerSymbol }) => {
-    const [gameBoard, setGameBoard] = useState(initialGameBoard);
-    const handleSelectSquare = useCallback((rowIndex, colIndex) => {
+const GameBoard = ({ onChangeActivePlayer, allTurns }) => {
 
-        setGameBoard((prevGameBoard) => {
-            const updatedGameBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-            updatedGameBoard[rowIndex][colIndex] = activePlayerSymbol;
-            return updatedGameBoard;
-        })
-        onChangeActivePlayer();
-    }, [onChangeActivePlayer, activePlayerSymbol])
+    let gameBoard = initialGameBoard;
+
+    for (const eachTurn of allTurns) {
+        const { square, player } = eachTurn;
+        const { row, col } = square;
+
+        gameBoard[row][col] = player;
+    }
+
+    // const [gameBoard, setGameBoard] = useState(initialGameBoard);
+    // const handleSelectSquare = useCallback((rowIndex, colIndex) => {
+
+    //     setGameBoard((prevGameBoard) => {
+    //         const updatedGameBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
+    //         updatedGameBoard[rowIndex][colIndex] = activePlayerSymbol;
+    //         return updatedGameBoard;
+    //     })
+    //     onChangeActivePlayer();
+    // }, [onChangeActivePlayer, activePlayerSymbol])
     return (
         <ol id="game-board">
             {gameBoard.map((row, rowIndex) => {
@@ -24,7 +34,7 @@ const GameBoard = ({ onChangeActivePlayer, activePlayerSymbol }) => {
                             {row.map((playerSymbol, playerSymbolIndex) => {
                                 return (
                                     <li key={playerSymbolIndex}>
-                                        <button onClick={() => { handleSelectSquare(rowIndex, playerSymbolIndex) }}>{playerSymbol}</button>
+                                        <button onClick={() => onChangeActivePlayer(rowIndex, playerSymbolIndex)}>{playerSymbol}</button>
                                     </li>
                                 );
                             })}
