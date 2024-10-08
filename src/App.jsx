@@ -1,5 +1,5 @@
 import PlayerInfo from "./components/Player-info"
-
+import GameBoard from "./components/GameBoard"
 const App = () => {
 
 
@@ -7,9 +7,10 @@ const App = () => {
     <main>
       <div id="game-container">
         <ol id="players">
-          <PlayerInfo playerName="Player 1" symbolName="X"></PlayerInfo>
-          <PlayerInfo playerName="Player 2" symbolName="O"></PlayerInfo>
+          <PlayerInfo initialName="Player 1" symbolName="X"></PlayerInfo>
+          <PlayerInfo initialName="Player 2" symbolName="O"></PlayerInfo>
         </ol>
+        <GameBoard></GameBoard>
       </div>
     </main>
   )

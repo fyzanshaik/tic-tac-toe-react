@@ -1,15 +1,32 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
-const PlayerInfo = ({ playerName, symbolName }) => {
+const PlayerInfo = ({ initialName, symbolName }) => {
+
     const [isEditing, setIsEditing] = useState(false);
+    const [playerName, setPlayerName] = useState(initialName);
+    const inputRef = useRef(null);
     const changeEditState = useCallback(() => {
         setIsEditing(prevEditState => !prevEditState);
     }, [])
 
+    useEffect(() => {
+        if (isEditing && inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+        }
+    }, [isEditing])
+
+    const handleInputChange = useCallback((event) => {
+        if (event.target.value.length === 0) {
+            setPlayerName("Player 1")
+        } else {
+            setPlayerName(event.target.value);
+        }
+    }, [])
     let playerHTML = <span className="player-name">{playerName}</span>
 
     if (isEditing) {
-        playerHTML = <input defaultValue={playerName} placeholder="Enter Name"></input>;
+        playerHTML = <input value={playerName} ref={inputRef} onChange={handleInputChange} placeholder="Enter Name"></input>;
     }
 
     return (
