@@ -2,16 +2,28 @@ import { useCallback, useState } from "react";
 import PlayerInfo from "./components/Player-info"
 import GameBoard from "./components/GameBoard"
 import Log from "./components/Log";
+
+
+const derivedActivePlayer = (gameTurns) => {
+  let currentPlayer = 'X';
+  if (gameTurns.length > 0 && gameTurns[0].player === 'X') {
+    currentPlayer = 'O';
+  }
+  return currentPlayer;
+}
+
+
 const App = () => {
-  const [activePlayer, setActivePlayer] = useState('X');
-  const [gameTurns, setGameTurns] = useState([]);
+  // const [activePlayer, setActivePlayer] = useState('X');
+  const [gameTurns, setGameTurns] = useState([]); //gameTurns : [{square:{row:1,col:0},player:X||O}]
+
+  const activePlayer = derivedActivePlayer(gameTurns);
+
+
   const handleChangeActivePlayer = useCallback((rowIndex, colIndex) => {
-    setActivePlayer((prevActivePlayer) => prevActivePlayer === 'X' ? 'O' : 'X')
+    // setActivePlayer((prevActivePlayer) => prevActivePlayer === 'X' ? 'O' : 'X')
     setGameTurns(prevTurns => {
-      let currentPlayer = 'X';
-      if (prevTurns.length > 0 && prevTurns[0].player === 'X') {
-        currentPlayer = 'O';
-      }
+      const currentPlayer = derivedActivePlayer(prevTurns);
       const updatedTurns = [{ square: { row: rowIndex, col: colIndex }, player: currentPlayer }, ...prevTurns]
 
       return updatedTurns;
@@ -27,7 +39,7 @@ const App = () => {
         </ol>
         <GameBoard onChangeActivePlayer={handleChangeActivePlayer} allTurns={gameTurns}></GameBoard>
       </div>
-      <Log></Log>
+      <Log turns={gameTurns}></Log>
     </main>
   )
 }

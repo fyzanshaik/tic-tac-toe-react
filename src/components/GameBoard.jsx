@@ -14,6 +14,13 @@ const GameBoard = ({ onChangeActivePlayer, allTurns }) => {
 
         gameBoard[row][col] = player;
     }
+    //bad method solved it even easier 
+    const checkForAvailability = useCallback((rowIndex, colIndex) => {
+        if (gameBoard[rowIndex][colIndex] == null) {
+            return false;
+        }
+        return true;
+    }, [gameBoard])
 
     // const [gameBoard, setGameBoard] = useState(initialGameBoard);
     // const handleSelectSquare = useCallback((rowIndex, colIndex) => {
@@ -31,10 +38,10 @@ const GameBoard = ({ onChangeActivePlayer, allTurns }) => {
                 return (
                     <li key={rowIndex}>
                         <ol>
-                            {row.map((playerSymbol, playerSymbolIndex) => {
+                            {row.map((col, colIndex) => {
                                 return (
-                                    <li key={playerSymbolIndex}>
-                                        <button onClick={() => onChangeActivePlayer(rowIndex, playerSymbolIndex)}>{playerSymbol}</button>
+                                    <li key={colIndex}>
+                                        <button disabled={col !== null} onClick={() => onChangeActivePlayer(rowIndex, colIndex)}>{col}</button>
                                     </li>
                                 );
                             })}
