@@ -23,9 +23,22 @@ const derivedActivePlayer = (gameTurns) => {
 const App = () => {
   // const [activePlayer, setActivePlayer] = useState('X');
   const [gameTurns, setGameTurns] = useState([]); //gameTurns : [{square:{row:1,col:0},player:X||O}]
+  const [playerData, setPlayerData] = useState({
+    X: "Player 1",
+    O: "Player 2"
+  })
+
+  const handlePlayerDataChange = useCallback((symbol, newName) => {
+    setPlayerData((prevPlayerData) => {
+      return {
+        ...prevPlayerData,
+        [symbol]: newName
+      }
+    })
+  }, [])
+
   let winner = null;
   const activePlayer = derivedActivePlayer(gameTurns);
-
   let gameBoard = [...initialGameBoard.map(arr => [...arr])];
 
   for (const eachTurn of gameTurns) {
@@ -41,7 +54,7 @@ const App = () => {
     const thirdSymbol = gameBoard[combinations[2].row][combinations[2].column];
 
     if (firstSymbol && firstSymbol == secondSymbol && secondSymbol == thirdSymbol) {
-      winner = firstSymbol;
+      winner = playerData[firstSymbol];
     }
 
   }
@@ -50,6 +63,7 @@ const App = () => {
   const handleRestart = () => {
     setGameTurns([]);
     winner = null; drawCheck = null;
+
   }
 
   const handleChangeActivePlayer = useCallback((rowIndex, colIndex) => {
@@ -66,8 +80,8 @@ const App = () => {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <PlayerInfo initialName="Player 1" symbolName="X" isActive={activePlayer === 'X'} ></PlayerInfo>
-          <PlayerInfo initialName="Player 2" symbolName="O" isActive={activePlayer === 'O'}></PlayerInfo>
+          <PlayerInfo initialName="Player 1" symbolName="X" isActive={activePlayer === 'X'} onChangeName={handlePlayerDataChange} ></PlayerInfo>
+          <PlayerInfo initialName="Player 2" symbolName="O" isActive={activePlayer === 'O'} onChangeName={handlePlayerDataChange}></PlayerInfo>
         </ol>
         {(winner || drawCheck) && <GameOver winnerSymbol={winner} restart={handleRestart} />}
         <GameBoard onChangeActivePlayer={handleChangeActivePlayer} board={gameBoard} ></GameBoard>

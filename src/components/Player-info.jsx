@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const PlayerInfo = ({ initialName, symbolName, isActive }) => {
+const PlayerInfo = ({ initialName, symbolName, isActive, onChangeName }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [playerName, setPlayerName] = useState(initialName);
     const inputRef = useRef(null);
@@ -13,6 +13,8 @@ const PlayerInfo = ({ initialName, symbolName, isActive }) => {
             inputRef.current.focus();
             inputRef.current.select();
         }
+        onChangeName(symbolName, playerName)
+
     }, [isEditing])
 
     const handleInputChange = useCallback((event) => {
