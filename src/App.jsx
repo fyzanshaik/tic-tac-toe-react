@@ -19,6 +19,11 @@ const derivedActivePlayer = (gameTurns) => {
   return currentPlayer;
 }
 
+const derivedWinner = (gameBoard, playerData) => {
+
+
+  return winner;
+}
 
 const App = () => {
   // const [activePlayer, setActivePlayer] = useState('X');
@@ -36,10 +41,10 @@ const App = () => {
       }
     })
   }, [])
-
-  let winner = null;
-  const activePlayer = derivedActivePlayer(gameTurns);
   let gameBoard = [...initialGameBoard.map(arr => [...arr])];
+
+  let winner = null
+  const activePlayer = derivedActivePlayer(gameTurns);
 
   for (const eachTurn of gameTurns) {
     const { square, player } = eachTurn;
@@ -52,7 +57,6 @@ const App = () => {
     const firstSymbol = gameBoard[combinations[0].row][combinations[0].column];
     const secondSymbol = gameBoard[combinations[1].row][combinations[1].column];
     const thirdSymbol = gameBoard[combinations[2].row][combinations[2].column];
-
     if (firstSymbol && firstSymbol == secondSymbol && secondSymbol == thirdSymbol) {
       winner = playerData[firstSymbol];
     }
@@ -86,7 +90,7 @@ const App = () => {
         {(winner || drawCheck) && <GameOver winnerSymbol={winner} restart={handleRestart} />}
         <GameBoard onChangeActivePlayer={handleChangeActivePlayer} board={gameBoard} ></GameBoard>
       </div>
-      <Log turns={gameTurns}></Log>
+      <Log turns={gameTurns} playerData={playerData}></Log>
     </main>
   )
 }
