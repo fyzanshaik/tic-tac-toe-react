@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import PlayerInfo from "./components/Player-info"
 import GameBoard from "./components/GameBoard"
 import Log from "./components/Log";
+import GameOver from "./components/GameOver";
 import WINNING_COMBINATIONS from "./winning-combinations";
 
 const initialGameBoard = [
@@ -25,7 +26,7 @@ const App = () => {
   let winner = null;
   const activePlayer = derivedActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map(arr => [...arr])];
 
   for (const eachTurn of gameTurns) {
     const { square, player } = eachTurn;
@@ -45,6 +46,12 @@ const App = () => {
 
   }
 
+  let drawCheck = gameTurns.length === 9 && !winner;
+  const handleRestart = () => {
+    setGameTurns([]);
+    winner = null; drawCheck = null;
+  }
+
   const handleChangeActivePlayer = useCallback((rowIndex, colIndex) => {
     // setActivePlayer((prevActivePlayer) => prevActivePlayer === 'X' ? 'O' : 'X')
     setGameTurns(prevTurns => {
@@ -62,8 +69,8 @@ const App = () => {
           <PlayerInfo initialName="Player 1" symbolName="X" isActive={activePlayer === 'X'} ></PlayerInfo>
           <PlayerInfo initialName="Player 2" symbolName="O" isActive={activePlayer === 'O'}></PlayerInfo>
         </ol>
-        {winner && <p>You won! {winner}!</p>}
-        <GameBoard onChangeActivePlayer={handleChangeActivePlayer} board={gameBoard}></GameBoard>
+        {(winner || drawCheck) && <GameOver winnerSymbol={winner} restart={handleRestart} />}
+        <GameBoard onChangeActivePlayer={handleChangeActivePlayer} board={gameBoard} ></GameBoard>
       </div>
       <Log turns={gameTurns}></Log>
     </main>
