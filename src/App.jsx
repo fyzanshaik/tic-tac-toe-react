@@ -1,19 +1,12 @@
 import { useCallback, useState, useMemo } from "react";
-import PlayerInfo from "./components/Player-info";
+import PlayerInfo from "./components/PlayerInfo";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
 import GameOver from "./components/GameOver";
-import WINNING_COMBINATIONS from "./winning-combinations";
-
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null]
-];
-
-const derivedActivePlayer = (gameTurns) => {
-  return gameTurns.length % 2 === 0 ? 'X' : 'O';
-};
+import WINNING_COMBINATIONS from "./constants/winning-combinations";
+import { derivedActivePlayer } from "./utils/derivedActivePlayer";
+import { derivedWinner } from "./utils/derivedWinner";
+import { initialGameBoard } from "./utils/initialGameBoard";
 
 const App = () => {
   const [gameTurns, setGameTurns] = useState([]);
@@ -39,14 +32,7 @@ const App = () => {
   }, [gameTurns]);
 
   const winner = useMemo(() => {
-    for (const combination of WINNING_COMBINATIONS) {
-      const [a, b, c] = combination;
-      const firstSymbol = gameBoard[a.row][a.column];
-      if (firstSymbol && firstSymbol === gameBoard[b.row][b.column] && firstSymbol === gameBoard[c.row][c.column]) {
-        return playerData[firstSymbol];
-      }
-    }
-    return null;
+    return derivedWinner(gameBoard, playerData);
   }, [gameBoard, playerData]);
 
   const isDraw = useMemo(() => gameTurns.length === 9 && !winner, [gameTurns, winner]);
