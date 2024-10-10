@@ -2,7 +2,13 @@ import { useCallback, useState } from "react";
 import PlayerInfo from "./components/Player-info"
 import GameBoard from "./components/GameBoard"
 import Log from "./components/Log";
+import WINNING_COMBINATIONS from "./winning-combinations";
 
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null]
+];
 
 const derivedActivePlayer = (gameTurns) => {
   let currentPlayer = 'X';
@@ -19,6 +25,14 @@ const App = () => {
 
   const activePlayer = derivedActivePlayer(gameTurns);
 
+  let gameBoard = initialGameBoard;
+
+  for (const eachTurn of gameTurns) {
+    const { square, player } = eachTurn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
 
   const handleChangeActivePlayer = useCallback((rowIndex, colIndex) => {
     // setActivePlayer((prevActivePlayer) => prevActivePlayer === 'X' ? 'O' : 'X')
@@ -37,7 +51,7 @@ const App = () => {
           <PlayerInfo initialName="Player 1" symbolName="X" isActive={activePlayer === 'X'} ></PlayerInfo>
           <PlayerInfo initialName="Player 2" symbolName="O" isActive={activePlayer === 'O'}></PlayerInfo>
         </ol>
-        <GameBoard onChangeActivePlayer={handleChangeActivePlayer} allTurns={gameTurns}></GameBoard>
+        <GameBoard onChangeActivePlayer={handleChangeActivePlayer} board={gameBoard}></GameBoard>
       </div>
       <Log turns={gameTurns}></Log>
     </main>

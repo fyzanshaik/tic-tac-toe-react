@@ -1,26 +1,14 @@
 import { useCallback, useState } from "react";
-const initialGameBoard = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-];
-const GameBoard = ({ onChangeActivePlayer, allTurns }) => {
 
-    let gameBoard = initialGameBoard;
+const GameBoard = ({ onChangeActivePlayer, board }) => {
 
-    for (const eachTurn of allTurns) {
-        const { square, player } = eachTurn;
-        const { row, col } = square;
-
-        gameBoard[row][col] = player;
-    }
     //bad method solved it even easier 
     const checkForAvailability = useCallback((rowIndex, colIndex) => {
-        if (gameBoard[rowIndex][colIndex] == null) {
+        if (board[rowIndex][colIndex] == null) {
             return false;
         }
         return true;
-    }, [gameBoard])
+    }, [board])
 
     // const [gameBoard, setGameBoard] = useState(initialGameBoard);
     // const handleSelectSquare = useCallback((rowIndex, colIndex) => {
@@ -34,7 +22,7 @@ const GameBoard = ({ onChangeActivePlayer, allTurns }) => {
     // }, [onChangeActivePlayer, activePlayerSymbol])
     return (
         <ol id="game-board">
-            {gameBoard.map((row, rowIndex) => {
+            {board.map((row, rowIndex) => {
                 return (
                     <li key={rowIndex}>
                         <ol>
